@@ -1,0 +1,7 @@
+<h3>Account has been created for you at {{ homepage }}</h3>
+
+<p>Hi {{ name }}! You're successfully registered.</p>
+
+<p>To set password and activate your account, please <a href="{{ url('auth_activate', {'token': token}) }}">click here</a>.</p>
+
+<p>Thanks!</p>

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Customer</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Email</th>
+                <td>{{ customer.email }}</td>
+            </tr>
+            <tr>
+                <th>Last_name</th>
+                <td>{{ customer.lastname }}</td>
+            </tr>
+            <tr>
+                <th>First_name</th>
+                <td>{{ customer.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Patronym</th>
+                <td>{{ customer.patronym }}</td>
+            </tr>
+            <tr>
+                <th>Birth date</th>
+                <td>{% if customer.birthDate %}{{ customer.birthDate|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>{{ customer.gender }}</td>
+            </tr>
+            <tr>
+                <th>Phone number</th>
+                <td>{{ customer.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Is active</th>
+                <td>{% if customer.isActive %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Is locked</th>
+                <td>{% if customer.isLocked %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <a href="{{ path('admin_customers_index') }}" class="btn btn-default" role="button">Back to the list</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Customers list</h1>
+
+    <table class="table table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Patronym</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Birth Date</th>
+                <th>Gender</th>
+                <th>Is Active</th>
+                <th>Is Locked</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if customers|length %}
+            {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.lastname }}</td>
+                    <td>{{ customer.firstname }}</td>
+                    <td>{{ customer.patronym }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.phoneNumber }}</td>
+                    <td>{% if customer.birthDate %}{{ customer.birthDate|date('Y-m-d') }}{% endif %}</td>
+                    <td>{{ customer.gender }}</td>
+                    <td>{% if customer.isActive %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if customer.isLocked %}Yes{% else %}No{% endif %}</td>
+                    <td>
+                        <a href="{{ path('admin_customers_show', { 'id': customer.id }) }}" class="btn btn-info" role="button">show</a>
+                        <a href="{{ path('admin_customers_edit', { 'id': customer.id }) }}" class="btn btn-primary" role="button">edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr class="warning text-center">
+                <td colspan="10">Customers list is empty yet</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <div>
+        <a href="{{ path('admin_customers_new') }}" class="btn btn-success" role="button">Create a new customer</a>
+    </div>
+{% endblock %}
