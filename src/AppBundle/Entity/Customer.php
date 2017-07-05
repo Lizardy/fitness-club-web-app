@@ -6,9 +6,8 @@ use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints\Date;
-use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping\JoinTable;
 use AppBundle\Entity\GroupActivity;
 
 /**
@@ -47,14 +46,14 @@ class Customer implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="first_name", type="string", length=255, unique=false)
      */
-    private $first_name;
+    private $firstName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255, unique=false)
      */
-    private $last_name;
+    private $lastName;
 
     /**
      * @var string
@@ -71,9 +70,9 @@ class Customer implements AdvancedUserInterface, \Serializable
     private $birthDate;
 
     /**
-     * @var enum
+     * @var string
      *
-     * @ORM\Column(name="gender", type="string", columnDefinition="enum('male', 'female')")
+     * @ORM\Column(name="gender", type="string")
      */
     private $gender;
 
@@ -106,11 +105,17 @@ class Customer implements AdvancedUserInterface, \Serializable
     private $roles;
 
     /**
-     * Many Customers have Many Group Activities.
-     * @ManyToMany(targetEntity="GroupActivity", inversedBy="customers")
-     * @JoinTable(name="customers_groupactivities")
+     * @var string
+     *
+     * @ORM\Column(name="activation_token", type="string", length=255, nullable=true)
      */
-    private $groupActivities;
+    private $activationToken;
+
+    /**
+     * Many Customers are subscribed to Many Group Activities via Notification Subscriptions.
+     * @OneToMany(targetEntity="NotificationSubscription", mappedBy="customers")
+     */
+    private $notificationSubscriptions;
 
     public function __construct()
     {
@@ -180,10 +185,10 @@ class Customer implements AdvancedUserInterface, \Serializable
     /**
      * Set gender
      *
-     * @param \enum $gender
+     * @param string $gender
      * @return Customer
      */
-    public function setGender(\enum $gender)
+    public function setGender($gender)
     {
         $this->gender = $gender;
 
@@ -193,7 +198,7 @@ class Customer implements AdvancedUserInterface, \Serializable
     /**
      * Get gender
      *
-     * @return \enum
+     * @return string
      */
     public function getGender()
     {
@@ -325,7 +330,7 @@ class Customer implements AdvancedUserInterface, \Serializable
      */
     public function setFirstName($firstName)
     {
-        $this->first_name = $firstName;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -337,7 +342,7 @@ class Customer implements AdvancedUserInterface, \Serializable
      */
     public function getFirstName()
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
@@ -349,7 +354,7 @@ class Customer implements AdvancedUserInterface, \Serializable
      */
     public function setLastName($lastName)
     {
-        $this->last_name = $lastName;
+        $this->lastName = $lastName;
 
         return $this;
     }
@@ -361,7 +366,7 @@ class Customer implements AdvancedUserInterface, \Serializable
      */
     public function getLastName()
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
     /**
@@ -470,6 +475,30 @@ class Customer implements AdvancedUserInterface, \Serializable
         return $this->groupActivities;
     }
 
+    /**
+     * Set activationToken
+     *
+     * @param string $activationToken
+     *
+     * @return Customer
+     */
+    public function setActivationToken($activationToken)
+    {
+        $this->activationToken = $activationToken;
+
+        return $this;
+    }
+
+    /**
+     * Get activationToken
+     *
+     * @return string
+     */
+    public function getActivationToken()
+    {
+        return $this->activationToken;
+    }
+
     /** @see \Serializable::serialize() */
     public function serialize()
     {
@@ -492,5 +521,39 @@ class Customer implements AdvancedUserInterface, \Serializable
             $this->isActive,
             $this->isLocked,
             ) = unserialize($serialized);
+    }
+
+    /**
+     * Add notificationSubscription
+     *
+     * @param \AppBundle\Entity\NotificationSubscription $notificationSubscription
+     *
+     * @return Customer
+     */
+    public function addNotificationSubscription(\AppBundle\Entity\NotificationSubscription $notificationSubscription)
+    {
+        $this->notificationSubscriptions[] = $notificationSubscription;
+
+        return $this;
+    }
+
+    /**
+     * Remove notificationSubscription
+     *
+     * @param \AppBundle\Entity\NotificationSubscription $notificationSubscription
+     */
+    public function removeNotificationSubscription(\AppBundle\Entity\NotificationSubscription $notificationSubscription)
+    {
+        $this->notificationSubscriptions->removeElement($notificationSubscription);
+    }
+
+    /**
+     * Get notificationSubscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotificationSubscriptions()
+    {
+        return $this->notificationSubscriptions;
     }
 }

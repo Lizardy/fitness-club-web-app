@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
@@ -47,10 +47,10 @@ class GroupActivity
     private $trainer;
 
     /**
-     * Many Group Activities have Many Customers.
-     * @ManyToMany(targetEntity="Customer", mappedBy="groupActivities")
+     * Many Group Activities have Many Customers subscribed to them via Notification Subscriptions.
+     * @OneToMany(targetEntity="NotificationSubscription", mappedBy="groupActivity")
      */
-    private $customers;
+    private $notificationSubscriptions;
 
     public function __construct() {
         $this->users = new ArrayCollection();
@@ -170,5 +170,39 @@ class GroupActivity
     public function getCustomers()
     {
         return $this->customers;
+    }
+
+    /**
+     * Add notificationSubscription
+     *
+     * @param \AppBundle\Entity\NotificationSubscription $notificationSubscription
+     *
+     * @return GroupActivity
+     */
+    public function addNotificationSubscription(\AppBundle\Entity\NotificationSubscription $notificationSubscription)
+    {
+        $this->notificationSubscriptions[] = $notificationSubscription;
+
+        return $this;
+    }
+
+    /**
+     * Remove notificationSubscription
+     *
+     * @param \AppBundle\Entity\NotificationSubscription $notificationSubscription
+     */
+    public function removeNotificationSubscription(\AppBundle\Entity\NotificationSubscription $notificationSubscription)
+    {
+        $this->notificationSubscriptions->removeElement($notificationSubscription);
+    }
+
+    /**
+     * Get notificationSubscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotificationSubscriptions()
+    {
+        return $this->notificationSubscriptions;
     }
 }
