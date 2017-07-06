@@ -2,8 +2,8 @@
 # https://symfony.com/doc/current/security.html
 security:
     encoders:
-        #AppBundle\Entity\User:
-            #algorithm: bcrypt
+        AppBundle\Entity\Customer:
+            algorithm: bcrypt
         Symfony\Component\Security\Core\User\User: plaintext
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
@@ -19,7 +19,7 @@ security:
                         roles: 'ROLE_ADMIN'
         db_customers:
             entity:
-                class: AppBundle:User
+                class: AppBundle:Customer
                 property: email
 
     firewalls:
@@ -33,13 +33,19 @@ security:
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #pattern: ^/
-            http_basic: ~
-            #provider: db_provider
+            pattern: ^/
+            provider: db_customers
+            http_basic:
+                realm: 'Admin area'
+                provider: in_memory
 
             # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+            form_login:
+                login_path: login
+                check_path: login
+                csrf_token_generator: security.csrf.token_manager
 
     access_control:
-        # require ROLE_ADMIN for /admin*
+        - { path: ^/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/profile, roles: ROLE_USER }

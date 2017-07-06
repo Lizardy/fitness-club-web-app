@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="wrapper">
+        <div id="container">
+            <div id="welcome">
+                <h1>Profile</h1>
+                <h3>Notifications settings for the group activities</h3>
+            </div>
+            <div>
+                <table class="table table-hover">
+                    <caption>Please select which types of notifications you wish to receive for which group activity below:</caption>
+                    <thead>
+                        <tr>
+                            <th>Group activity</th>
+                            <th>Email</th>
+                            <th>SMS</th>
+                            <th>None</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for group_activity in group_activities_all_existing %}
+                        <tr>
+                            <td>{{ group_activity.activityName }}</td>
+                            <td><input type="radio" name="{{ group_activity.activityName }}" value="email"/></td>
+                            <td><input type="radio" name="{{ group_activity.activityName }}" value="sms"/></td>
+                            <td><input type="radio" name="{{ group_activity.activityName }}" value="none"/></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-group" role="group" aria-label="admin-panels">
+                <a class="btn btn-default" href="#" role="button">Group activities</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
