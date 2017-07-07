@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Trainer</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ trainer.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ trainer.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Patronym</th>
+                <td>{{ trainer.patronym }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <a href="{{ path('admin_trainers_index') }}" class="btn btn-default" role="button">Back to the list</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Trainer creation</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Create" class="btn btn-success" role="button"/>
+    {{ form_end(form) }}
+
+    <div>
+        <a href="{{ path('admin_trainers_index') }}" class="btn btn-default" role="button">Back to the list</a>
+    </div>
+
+{% endblock %}

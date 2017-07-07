@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Trainers list</h1>
+
+    <table class="table table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>Lastname</th>
+                <th>Firstname</th>
+                <th>Patronym</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if trainers|length %}
+            {% for trainer in trainers %}
+                <tr>
+                    <td>{{ trainer.lastName }}</td>
+                    <td>{{ trainer.firstName }}</td>
+                    <td>{{ trainer.patronym }}</td>
+                    <td>
+                        <a href="{{ path('admin_trainers_show', { 'id': trainer.id }) }}" class="btn btn-info" role="button">show</a>
+                        <a href="{{ path('admin_trainers_edit', { 'id': trainer.id }) }}" class="btn btn-primary" role="button">edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr class="warning text-center">
+                <td colspan="4">Trainers list is empty yet</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <div>
+        <a href="{{ path('admin_trainers_new') }}" class="btn btn-success" role="button">Create a new trainer</a>
+    </div>
+
+{% endblock %}
