@@ -38,18 +38,18 @@
                     <div class="form-group">
                         <label>Placeholder variables (click to copy to clipboard)</label>
                         <div class="list-group">
-                            <button type="button" class="list-group-item">First name</button>
-                            <button type="button" class="list-group-item">Last name</button>
-                            <button type="button" class="list-group-item">First name + Last name</button>
-                            <button type="button" class="list-group-item">Birth date</button>
-                            <button type="button" class="list-group-item">Email</button>
-                            <button type="button" class="list-group-item">Phone number</button>
+                            <button type="button" class="list-group-item" data-clipboard-text="%firstname%">First name</button>
+                            <button type="button" class="list-group-item" data-clipboard-text="%lastname%">Last name</button>
+                            <button type="button" class="list-group-item" data-clipboard-text="%patronym%">Patronym</button>
+                            <button type="button" class="list-group-item" data-clipboard-text="%birthdate%">Birth date</button>
+                            <button type="button" class="list-group-item" data-clipboard-text="%email%">Email</button>
+                            <button type="button" class="list-group-item" data-clipboard-text="%phonenumber%">Phone number</button>
                         </div>
                         {#todo: group activity variables#}
                     </div>
                 </div>
                 <div class="text-center">
-                    <input type="submit" class="btn btn-warning">Send to subscribers</input>
+                    <input type="submit" class="btn btn-warning" value="Send to subscribers"/>
                 </div>
             </form>
         </div>
