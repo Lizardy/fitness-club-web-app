@@ -55,6 +55,10 @@ class Trainer
         $this->groupActivities = new ArrayCollection();
     }
 
+    public function __toString() {
+        return $this->lastName . " " . $this->firstName . " " . $this->patronym;
+    }
+
     /**
      * Get id
      *

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Group activity</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th width="20%">Activity name</th>
+                <td>{{ groupActivity.activityName }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ groupActivity.description }}</td>
+            </tr>
+            <tr>
+                <th>Number of notification subscribers</th>
+                <td><span class="badge">{{ groupActivity.notificationSubscriptions|length }}</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Notifications</h3>
+        </div>
+        <div class="panel-body">
+            <form action="{{ path('admin_groupactivities_sendnotifications') }}">
+                <div style="column-count: 3;">
+                    <div class="form-group">
+                        <label for="email-text">Email notification text</label>
+                        <textarea name="email-text" class="form-control" rows="12"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="sms-text">SMS notification text</label>
+                        <textarea name="sms-text" class="form-control" rows="12"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Placeholder variables (click to copy to clipboard)</label>
+                        <div class="list-group">
+                            <button type="button" class="list-group-item">First name</button>
+                            <button type="button" class="list-group-item">Last name</button>
+                            <button type="button" class="list-group-item">First name + Last name</button>
+                            <button type="button" class="list-group-item">Birth date</button>
+                            <button type="button" class="list-group-item">Email</button>
+                            <button type="button" class="list-group-item">Phone number</button>
+                        </div>
+                        {#todo: group activity variables#}
+                    </div>
+                </div>
+                <div class="text-center">
+                    <input type="submit" class="btn btn-warning">Send to subscribers</input>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a href="{{ path('admin_groupactivities_index') }}" class="btn btn-default" role="button">Back to the list</a>
+    </div>
+{% endblock %}

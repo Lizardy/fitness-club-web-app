@@ -138,47 +138,6 @@ class GroupActivity
         return $this->trainer;
     }
 
-    /**
-     * Add customer
-     *
-     * @param \AppBundle\Entity\Customer $customer
-     *
-     * @return GroupActivity
-     */
-    public function addCustomer(\AppBundle\Entity\Customer $customer)
-    {
-        $this->customers[] = $customer;
-
-        return $this;
-    }
-
-    /**
-     * Remove customer
-     *
-     * @param \AppBundle\Entity\Customer $customer
-     */
-    public function removeCustomer(\AppBundle\Entity\Customer $customer)
-    {
-        $this->customers->removeElement($customer);
-    }
-
-    /**
-     * Get customers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCustomers()
-    {
-        return $this->customers;
-    }
-
-    /**
-     * Add notificationSubscription
-     *
-     * @param \AppBundle\Entity\NotificationSubscription $notificationSubscription
-     *
-     * @return GroupActivity
-     */
     public function addNotificationSubscription(\AppBundle\Entity\NotificationSubscription $notificationSubscription)
     {
         $this->notificationSubscriptions[] = $notificationSubscription;
