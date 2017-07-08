@@ -28,22 +28,26 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
+        admin:
+            pattern: ^/admin
+            provider: in_memory
+            http_basic:
+                realm: 'Admin area'
+
+        customers:
             anonymous: ~
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
             pattern: ^/
             provider: db_customers
-            http_basic:
-                realm: 'Admin area'
-                provider: in_memory
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             form_login:
                 login_path: login
                 check_path: login
                 csrf_token_generator: security.csrf.token_manager
+                default_target_path: /profile/notifications
 
     access_control:
         - { path: ^/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
