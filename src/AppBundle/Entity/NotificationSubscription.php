@@ -38,6 +38,11 @@ class NotificationSubscription
      */
     protected $groupActivity;
 
+    public function __construct($method)
+    {
+        $this->method = $method;
+    }
+
     /**
      * Set method
      *
