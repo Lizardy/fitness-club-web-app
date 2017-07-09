@@ -18,6 +18,12 @@ use AppBundle\Entity\GroupActivity;
  */
 class Customer implements AdvancedUserInterface, \Serializable
 {
+    const PLACEHOLDER_VARIABLES = array(
+        'First name' => '%firstname%', 'Last name' => '%lastname%', 'Patronym' => '%patronym%',
+        'First name Last name' => '%firstlastname%',
+        'Birth date' => '%birthdate%', 'Email' => '%email%', 'Phone number' => '%phonenumber%'
+    );
+
     /**
      * @var int
      *
