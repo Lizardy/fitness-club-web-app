@@ -41,7 +41,7 @@ class GroupActivity
 
     /**
      * Many GroupActivities have One Trainer.
-     * @ManyToOne(targetEntity="Trainer")
+     * @ManyToOne(targetEntity="Trainer", inversedBy="groupActivities")
      * @JoinColumn(name="trainer_id", referencedColumnName="id")
      */
     private $trainer;

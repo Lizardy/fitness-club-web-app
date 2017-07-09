@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Customer;
 use AppBundle\Entity\GroupActivity;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Groupactivity controller.
@@ -34,14 +36,32 @@ class GroupActivityController extends Controller
     /**
      * Submit the form for sending notifications to all group activity's subscribers
      *
-     * @Route("/sendnotifications", name="admin_groupactivities_sendnotifications")
+     * @Route("/queuenotifications", name="admin_groupactivities_queuenotifications")
      * @Method("POST")
      */
-    public function sendNotificationsAction(Request $request)
+    public function queueNotificationsAction(Request $request)
     {
+        $textEmailTemplate = $request->request->get('email-text');
+        $textSmsTemplate = $request->request->get('sms-text');
+        $groupActivityId = intval($request->request->get('group-activity-id'));
         $em = $this->getDoctrine()->getManager();
-        $groupActivities = $em->getRepository('AppBundle:GroupActivity')->findAll();
-        //todo: use rabbitmq to send notifications
+        $groupActivity = $em->getRepository('AppBundle:GroupActivity')
+            ->findOneBy(array('id' => $groupActivityId));
+        $customersSubscribers = $em->getRepository('AppBundle:Customer')->findBy(array('isLocked' => false));
+        $sendNotificationProducer = $this->get('old_sound_rabbit_mq.send_notification_producer');
+
+        foreach ($customersSubscribers as $customerSubscriber){
+
+            if ($customerSubscriber->getSubscriptionMethod($groupActivity) === 'email'){
+                $textEmail = $customerSubscriber->fillMessageTemplate($textEmailTemplate);
+                $msg = array('text' => $textEmail, 'send_to' => $customerSubscriber->getEmail());
+                $sendNotificationProducer->publish(serialize($msg), 'notification-email');
+            } else if ($customerSubscriber->getSubscriptionMethod($groupActivity) === 'sms'){
+                $textSms = $customerSubscriber->fillMessageTemplate($textSmsTemplate);
+                $msg = array('text' => $textSms, 'send_to' => $customerSubscriber->getPhoneNumber());
+                $sendNotificationProducer->publish(serialize($msg), 'notification-sms');
+            }
+        }
 
         return $this->redirectToRoute('admin_groupactivities_index');
     }
@@ -80,11 +100,9 @@ class GroupActivityController extends Controller
      */
     public function showAction(GroupActivity $groupActivity)
     {
-        $deleteForm = $this->createDeleteForm($groupActivity);
-
         return $this->render('groupactivity/show.html.twig', array(
             'groupActivity' => $groupActivity,
-            'delete_form' => $deleteForm->createView(),
+            'placeholderVariables' => Customer::PLACEHOLDER_VARIABLES
         ));
     }
 
@@ -96,7 +114,6 @@ class GroupActivityController extends Controller
      */
     public function editAction(Request $request, GroupActivity $groupActivity)
     {
-        $deleteForm = $this->createDeleteForm($groupActivity);
         $editForm = $this->createForm('AppBundle\Form\GroupActivityType', $groupActivity);
         $editForm->handleRequest($request);
 
@@ -109,7 +126,6 @@ class GroupActivityController extends Controller
         return $this->render('groupactivity/edit.html.twig', array(
             'groupActivity' => $groupActivity,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

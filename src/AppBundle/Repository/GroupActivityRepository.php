@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Customer;
 
 /**
  * GroupActivityRepository
@@ -12,10 +13,10 @@ class GroupActivityRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
      * Get all existing group activities with related subscription method for the customer
-     * @param $customer
+     * @param Customer $customer
      * @return array
      */
-    public function getAllGroupActivitiesWithSubscriptionInfoForCustomer($customer){
+    public function getAllGroupActivitiesWithSubscriptionInfoForCustomer(Customer $customer){
         return $this->getEntityManager()
             ->createQuery(
                 'SELECT ga.id, ga.activityName, ga.description, ns.method

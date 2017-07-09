@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints\Date;
@@ -119,7 +118,7 @@ class Customer implements AdvancedUserInterface, \Serializable
 
     /**
      * Many Customers are subscribed to Many Group Activities via Notification Subscriptions.
-     * @OneToMany(targetEntity="NotificationSubscription", mappedBy="customers")
+     * @OneToMany(targetEntity="NotificationSubscription", mappedBy="customer")
      */
     private $notificationSubscriptions;
 
@@ -561,5 +560,38 @@ class Customer implements AdvancedUserInterface, \Serializable
     public function getNotificationSubscriptions()
     {
         return $this->notificationSubscriptions;
+    }
+
+    /**
+     * Get subscription method to the given group activity for the current customer
+     * @param \AppBundle\Entity\GroupActivity $groupActivity
+     * @return string or null
+     */
+    public function getSubscriptionMethod(GroupActivity $groupActivity){
+        foreach ($this->notificationSubscriptions as $subscription){
+            if ($subscription->getGroupActivity()->getId() === $groupActivity->getId()){
+                return $subscription->getMethod();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Fill real current customer's data into the message template
+     * @param string $template
+     * @return string
+     */
+    public function fillMessageTemplate($template)
+    {
+        $placeholdersValues = array(
+            '%firstname%' => $this->getFirstName(),
+            '%lastname%' => $this->getLastName(),
+            '%patronym%' => $this->getPatronym(),
+            '%firstlastname%' => $this->getFirstName() . ' ' . $this->getLastName(),
+            '%birthdate%' => $this->getBirthDate()->format('d/m/Y'),
+            '%email%' => $this->getEmail(),
+            '%phonenumber%' => $this->getPhoneNumber()
+        );
+        return str_replace(array_keys($placeholdersValues), array_values($placeholdersValues), $template);
     }
 }
