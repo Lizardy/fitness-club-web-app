@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
     <div class="text-center">
-        <h3>Fitness club for customers</h3>
+        {% if error %}
+            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        <h3>Fitness club services for customers</h3>
+        <h4>Please log in to continue</h4>
         <form action="{{ path('login') }}" method="post" class="form-horizontal">
             <div class="form-group">
                 <label for="username" class="col-sm-4 control-label">Email:</label>

@@ -50,6 +50,7 @@ class CustomerController extends Controller
             $activationToken = rtrim(strtr(base64_encode(random_bytes(10)), '+/=', '-_'),'=');
             $customer->setActivationToken($activationToken);
             //password is empty string for now, because customer will be prompted to set it
+            //customer will not be able to login anyway while account is not active
             $customer->setPassword('');
             $customer->setRoles(array('ROLE_USER'));
 
