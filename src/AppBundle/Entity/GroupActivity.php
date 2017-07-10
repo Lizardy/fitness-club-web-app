@@ -53,7 +53,7 @@ class GroupActivity
     private $notificationSubscriptions;
 
     public function __construct() {
-        $this->users = new ArrayCollection();
+        $this->notificationSubscriptions = new ArrayCollection();
     }
 
     /**

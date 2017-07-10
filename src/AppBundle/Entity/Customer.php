@@ -126,7 +126,7 @@ class Customer implements AdvancedUserInterface, \Serializable
     {
         $this->isActive = false;
         $this->isLocked = false;
-        $this->groups = new ArrayCollection();
+        $this->notificationSubscriptions = new ArrayCollection();
     }
 
     /**
