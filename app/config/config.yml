@@ -97,18 +97,37 @@ old_sound_rabbit_mq:
             # See https://www.rabbitmq.com/uri-spec.html on how to encode values.
             url: 'amqp://guest:password@localhost:5672/vhost?lazy=1&connection_timeout=6'
     producers:
+        # this one is utilised for the initial publishing to exchange both email and sms messages
         send_notification:
             connection:       default
-            exchange_options: {name: 'send-notification', type: direct}
-            service_alias:    my_app_service # no alias by default
-    consumers:
-        send_notification_sms:
+            exchange_options: {name: 'x.send.notification', type: direct}
+        # this one is utilised for reblishing messages which failed to be sent inside consumer callback
+        resend_notification:
             connection:       default
-            exchange_options: {name: 'send-notification', type: direct}
-            queue_options:    {name: 'send-notification-sms', routing_keys: ['notification-sms']}
-            callback:         AppBundle\Service\SmsNotificationSender
+            exchange_options: {name: 'x.resend.notification', type: direct}
+        # this one is for exchange creation and is not used explicitly
+        resend_notifications_sms:
+            connection:       default
+            exchange_options: {name: 'x.resend.notification.sms', type: fanout}
+    consumers:
+        # should be running with php bin/console rabbitmq:consumer send_notification_email
         send_notification_email:
             connection:       default
-            exchange_options: {name: 'send-notification', type: direct}
-            queue_options:    {name: 'send-notification-email', routing_keys: ['notification-email']}
+            exchange_options: {name: 'x.send.notification', type: direct}
+            queue_options:    {name: 'q.send.notification.email', routing_keys: ['rk.notification.email']}
             callback:         AppBundle\Service\EmailNotificationSender
+        # no need to run this one, it's for queue creation purposes
+        send_notification_sms_retry:
+            connection:       default
+            exchange_options: {name: 'x.resend.notification', type: direct}
+            queue_options:    {name: 'q.resend.notification.sms', routing_keys: ['rk.notification.sms'], arguments: {'x-dead-letter-exchange': ['S', 'x.resend.notification.sms'], 'x-message-ttl': ['I', 600000]} }
+            callback:         AppBundle\Service\SmsNotificationResender
+        # should be running with php bin/console rabbitmq:consumer send_notification_sms
+        send_notification_sms:
+            connection:       default
+            exchange_options: {name: 'x.send.notification', type: direct}
+            queue_options:    {name: 'q.send.notification.sms', routing_keys: ['rk.notification.sms'] }
+            callback:         AppBundle\Service\SmsNotificationSender
+    # exchanes and queues used here must be already declared as rabbitmq:setup-fabric will not create these defined here
+    bindings:
+        - {exchange: x.resend.notification.sms, destination: q.send.notification.sms}

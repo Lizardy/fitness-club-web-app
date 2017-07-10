@@ -30,7 +30,14 @@ services:
         tags: ['controller.service_arguments']
 
     # add more services, or override services that need manual wiring
+
+    # rabbitmq send_notification_email consumer's callback
     AppBundle\Service\EmailNotificationSender:
         arguments:
             $mailFromAddress: '%mail_from_address%'
             $mailFromName: '%mail_from_name%'
+
+    # rabbitmq send_notification_sms consumer's callback
+    AppBundle\Service\SmsNotificationSender:
+        arguments:
+            $sendNotificationProducer: '@old_sound_rabbit_mq.resend_notification_producer'

@@ -19,18 +19,19 @@ class EmailNotificationSender extends NotificationSender
 
     public function execute(AMQPMessage $msg)
     {
-        echo "start execute\n";
+        echo "email start execute\n";
+        //get data from the message which was fetched from queue
         $messageFromQueue = unserialize($msg->body);
         $text = $messageFromQueue['text'];
         $sendTo = $messageFromQueue['send_to'];
-        echo sprintf ("received message: text: '%s' sendto: '%s' \n",$text,$sendTo);
+        echo sprintf ("received message: text: '%s' send to: '%s' \n",$text,$sendTo);
         $message = $this->mailer->createMessage()
             ->setSubject('Notification from Fitness club')
             ->setFrom($this->mailFrom)
             ->setTo($sendTo)
             ->setBody($text);
-        $res = $this->mailer->send($message);
-        echo "email sent: " . $res . "\n";
-        return $res;
+        $success = $this->mailer->send($message);
+        echo "email sent: " . $success . "\n";
+        return $success;
     }
 }

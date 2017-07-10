@@ -55,11 +55,13 @@ class GroupActivityController extends Controller
             if ($customerSubscriber->getSubscriptionMethod($groupActivity) === 'email'){
                 $textEmail = $customerSubscriber->fillMessageTemplate($textEmailTemplate);
                 $msg = array('text' => $textEmail, 'send_to' => $customerSubscriber->getEmail());
-                $sendNotificationProducer->publish(serialize($msg), 'notification-email');
+                $sendNotificationProducer->setDeliveryMode(1);
+                $sendNotificationProducer->publish(serialize($msg), 'rk.notification.email');
             } else if ($customerSubscriber->getSubscriptionMethod($groupActivity) === 'sms'){
                 $textSms = $customerSubscriber->fillMessageTemplate($textSmsTemplate);
                 $msg = array('text' => $textSms, 'send_to' => $customerSubscriber->getPhoneNumber());
-                $sendNotificationProducer->publish(serialize($msg), 'notification-sms');
+                $sendNotificationProducer->setDeliveryMode(1);
+                $sendNotificationProducer->publish(serialize($msg), 'rk.notification.sms');
             }
         }
 
