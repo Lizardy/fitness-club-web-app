@@ -20,7 +20,9 @@ class CustomerType extends AbstractType
             ->add('patronym')
             ->add('birthDate')
             ->add('gender')
-            ->add('phoneNumber');
+            ->add('phoneNumber')
+            ->add('isLocked', null, array('label_attr' => array('class'=>'label label-warning')))
+        ;
     }
     
     /**
