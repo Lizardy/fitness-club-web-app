@@ -1,0 +1,8 @@
+<div class="page-header">
+    <ul class="nav nav-pills">
+        <li role="presentation" class={{ (pill == 'customers') ? "active" : "" }}><a href="{{ path('admin_customers_index') }}">Customers</a></li>
+        <li role="presentation" class={{ (pill == 'groupactivities') ? "active" : "" }}><a href="{{ path('admin_groupactivities_index') }}">Group activities</a></li>
+        <li role="presentation" class={{ (pill == 'trainers') ? "active" : "" }}><a href="{{ path('admin_trainers_index') }}">Trainers</a></li>
+    </ul>
+    <h3>{{ header_text }}</h3>
+</div>

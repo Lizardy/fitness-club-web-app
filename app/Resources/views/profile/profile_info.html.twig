@@ -2,10 +2,11 @@
 
 {% block body %}
 
-    {% include ':default:admin_nav.html.twig' with {'pill': 'customers', 'header_text': 'Customer info'} %}
+    {% include ':default:profile_nav.html.twig' with {'pill': 'profile', 'header_text': 'Profile info and change password'} %}
 
-    <table>
-        <tbody>
+    <div class="col-md-4">
+        <table class="table table-striped">
+            <tbody>
             <tr>
                 <th>Email</th>
                 <td>{{ customer.email }}</td>
@@ -34,18 +35,21 @@
                 <th>Phone number</th>
                 <td>{{ customer.phoneNumber }}</td>
             </tr>
-            <tr>
-                <th>Is active</th>
-                <td>{% if customer.isActive %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Is locked</th>
-                <td>{% if customer.isLocked %}Yes{% else %}No{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div>
-        <a href="{{ path('admin_customers_index') }}" class="btn btn-default" role="button">Back to the list</a>
+            </tbody>
+        </table>
     </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Change password</h3>
+            </div>
+            <div class="panel-body">
+                {{ form_start(customer_password_form) }}
+                {{ form_widget(customer_password_form) }}
+                <input type="submit" value="Set password" class="btn btn-primary" role="button"/>
+                {{ form_end(customer_password_form) }}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

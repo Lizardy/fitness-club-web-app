@@ -3,10 +3,9 @@
 {% block body %}
     <div id="wrapper">
         <div id="container">
-            <div id="welcome">
-                <h1>Profile</h1>
-                <h3>Notifications settings for the group activities</h3>
-            </div>
+
+            {% include ':default:profile_nav.html.twig' with {'pill': 'notifications', 'header_text': 'Notifications settings for the group activities'} %}
+
             <div>
                 <form action="{{ path('profile_notifications_settings') }}" method="post">
                     <table class="table table-hover">

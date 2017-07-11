@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Group activity edit</h1>
+
+    {% include ':default:admin_nav.html.twig' with {'pill': 'groupactivities', 'header_text': 'Group activity edit'} %}
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}

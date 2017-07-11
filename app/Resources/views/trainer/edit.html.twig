@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Trainer edit</h1>
+
+    {% include ':default:admin_nav.html.twig' with {'pill': 'trainers', 'header_text': 'Trainer edit'} %}
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}

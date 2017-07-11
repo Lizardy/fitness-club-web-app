@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Profile controller.
@@ -73,6 +74,34 @@ class ProfileController extends Controller
 
         return $this->render('profile/activities_notifications_settings.html.twig', array(
             'group_activities_subscriptions' => $allGroupActivitiesWithSubscriptionInfoForCustomer
+        ));
+    }
+
+    /**
+     * Customer's profile page where his/her info is available and password can be changed
+     *
+     * @Route("/info", name="profile_info")
+     * @Method({"GET", "POST"})
+     */
+    public function profileAction(Request $request, UserPasswordEncoderInterface $encoder)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $customer = $this->container->get('security.token_storage')->getToken()->getUser();
+        $customerPasswordForm = $this->createForm('AppBundle\Form\CustomerPasswordType', $customer);
+        $customerPasswordForm->handleRequest($request);
+
+        if ($customerPasswordForm->isSubmitted() && $customerPasswordForm->isValid()) {
+            //set customer's password
+            $encodedPassword = $encoder->encodePassword($customer, $customer->getPassword());
+            $customer->setPassword($encodedPassword);
+            $em->flush();
+
+            return $this->redirect($request->getUri());
+        }
+
+        return $this->render('profile/profile_info.html.twig', array(
+            'customer' => $customer,
+            'customer_password_form' => $customerPasswordForm->createView(),
         ));
     }
 }

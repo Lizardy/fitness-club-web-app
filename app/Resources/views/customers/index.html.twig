@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Customers list</h1>
+
+    {% include ':default:admin_nav.html.twig' with {'pill': 'customers', 'header_text': 'Customers list'} %}
 
     <table class="table table-hover table-responsive">
         <thead>
