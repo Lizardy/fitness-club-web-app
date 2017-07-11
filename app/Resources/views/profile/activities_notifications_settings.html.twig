@@ -7,6 +7,11 @@
             {% include ':default:profile_nav.html.twig' with {'pill': 'notifications', 'header_text': 'Notifications settings for the group activities'} %}
 
             <div>
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
                 <form action="{{ path('profile_notifications_settings') }}" method="post">
                     <table class="table table-hover">
                         <caption>Please select which types of notifications you wish to receive for which group activity below:</caption>

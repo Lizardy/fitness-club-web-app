@@ -68,7 +68,7 @@ class ProfileController extends Controller
             //execute all changes in one transaction
             $em->flush();
 
-            //todo: add flash message
+            $this->addFlash('success', 'Notifications settings have been updated');
             return $this->redirect($request->getUri());
         }
 
