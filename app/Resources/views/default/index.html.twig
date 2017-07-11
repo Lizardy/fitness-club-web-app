@@ -5,12 +5,8 @@
         <div class="text-center">
             <h1>Welcome to Fitness Club!</h1>
             <div>
-                {% if 'ROLE_USER' in app.user.roles %}
-                    <a href="{{ path('profile_notifications_settings') }}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-user"></span></a>
-                {% endif %}
-                {% if 'ROLE_ADMIN' in app.user.roles %}
-                    <a href="{{ path('admin_customers_index') }}" class="btn btn-default" role="button">Enter Admin Area</a>
-                {% endif %}
+                <a href="{{ path('profile_notifications_settings') }}" class="btn btn-default" role="button">Enter Customers Area</a>
+                <a href="{{ path('admin_customers_index') }}" class="btn btn-default" role="button">Enter Admin Area</a>
             </div>
         </div>
     </div>
