@@ -96,6 +96,8 @@ class ProfileController extends Controller
             $customer->setPassword($encodedPassword);
             $em->flush();
 
+            $this->addFlash('success', 'Password has been updated');
+
             return $this->redirect($request->getUri());
         }
 

@@ -44,6 +44,11 @@
                 <h3 class="panel-title">Change password</h3>
             </div>
             <div class="panel-body">
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
                 {{ form_start(customer_password_form) }}
                 <div class="form-group">
                     {{ form_widget(customer_password_form) }}
