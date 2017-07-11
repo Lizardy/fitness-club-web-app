@@ -45,8 +45,12 @@
             </div>
             <div class="panel-body">
                 {{ form_start(customer_password_form) }}
-                {{ form_widget(customer_password_form) }}
-                <input type="submit" value="Set password" class="btn btn-primary" role="button"/>
+                <div class="form-group">
+                    {{ form_widget(customer_password_form) }}
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Set password" class="btn btn-primary" role="button"/>
+                </div>
                 {{ form_end(customer_password_form) }}
             </div>
         </div>
